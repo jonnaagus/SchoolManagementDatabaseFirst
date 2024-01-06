@@ -5,7 +5,7 @@ namespace SchoolManagementDatabaseFirst.Models
 {
     public partial class Enroll
     {
-        public int FkstudentId { get; set; }
-        public int FkcourseId { get; set; }
+        public int FKStudentID { get; set; }
+        public int FKCourseID { get; set; }
     }
 }

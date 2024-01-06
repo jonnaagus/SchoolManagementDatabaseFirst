@@ -15,14 +15,14 @@ namespace SchoolManagementDatabaseFirst.Migrations
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
-                name: "FKCourseId",
+                name: "FKCourseID",
                 table: "Grades",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
-                name: "FKStudentId",
+                name: "FKStudentID",
                 table: "Grades",
                 type: "int",
                 nullable: false,

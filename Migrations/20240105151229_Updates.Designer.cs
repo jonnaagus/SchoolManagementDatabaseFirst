@@ -12,8 +12,8 @@ using SchoolManagementDatabaseFirst.Models;
 namespace SchoolManagementDatabaseFirst.Migrations
 {
     [DbContext(typeof(SchoolDatabaseContext))]
-    [Migration("20240102222931_NameChange")]
-    partial class NameChange
+    [Migration("20240105151229_Updates")]
+    partial class Updates
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,7 @@ namespace SchoolManagementDatabaseFirst.Migrations
 
             modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Course", b =>
                 {
-                    b.Property<int>("CourseID")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int")
                         .HasColumnName("CourseID");
 
@@ -36,7 +36,7 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("CourseID");
+                    b.HasKey("CourseId");
 
                     b.ToTable("Courses");
                 });
@@ -64,9 +64,16 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .HasColumnType("int")
                         .HasColumnName("FKGradeID");
 
+                    b.Property<int?>("FkstudentId")
+                        .HasColumnType("int")
+                        .HasColumnName("FKStudentID");
+
                     b.Property<int>("FkteacherId")
                         .HasColumnType("int")
                         .HasColumnName("FKTeacherID");
+
+                    b.Property<DateTime?>("GradeDate")
+                        .HasColumnType("datetime");
 
                     b.ToTable("GivesGrades");
                 });
@@ -77,32 +84,44 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .HasColumnType("int")
                         .HasColumnName("GradeID");
 
-                    b.Property<int?>("CourseID")
-                        .HasColumnType("int");
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int")
+                        .HasColumnName("CourseID");
 
                     b.Property<DateTime>("GradeDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("StudentID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Value")
+                    b.Property<string>("GradeValue")
                         .IsRequired()
                         .HasMaxLength(10)
                         .IsUnicode(false)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<int>("_FKCourseId")
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int")
+                        .HasColumnName("StudentID");
+
+                    b.Property<int>("TeacherID")
                         .HasColumnType("int");
 
-                    b.Property<int>("_FKStudentId")
+                    b.Property<int>("_FKCourseID")
+                        .HasColumnType("int")
+                        .HasColumnName("_FKCourseID");
+
+                    b.Property<int>("_FKStudentID")
+                        .HasColumnType("int")
+                        .HasColumnName("_FKStudentID");
+
+                    b.Property<int>("_FKTeacherID")
                         .HasColumnType("int");
 
                     b.HasKey("GradeId");
 
-                    b.HasIndex("CourseID");
+                    b.HasIndex("TeacherID");
 
-                    b.HasIndex("StudentID");
+                    b.HasIndex(new[] { "CourseId" }, "IX_Grades_CourseID");
+
+                    b.HasIndex(new[] { "StudentId" }, "IX_Grades_StudentID");
 
                     b.ToTable("Grades");
                 });
@@ -113,11 +132,24 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .HasColumnType("int")
                         .HasColumnName("PrincipalID");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("PrincipalId");
 
@@ -148,6 +180,12 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
                     b.HasKey("StaffId");
 
                     b.ToTable("Staffs");
@@ -155,11 +193,11 @@ namespace SchoolManagementDatabaseFirst.Migrations
 
             modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Student", b =>
                 {
-                    b.Property<int>("StudentID")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int")
                         .HasColumnName("StudentID");
 
-                    b.Property<string>("Class")
+                    b.Property<string>("ClassName")
                         .IsRequired()
                         .HasMaxLength(15)
                         .IsUnicode(false)
@@ -184,14 +222,14 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .HasColumnType("varchar(12)")
                         .HasColumnName("PersonalIDNr");
 
-                    b.HasKey("StudentID");
+                    b.HasKey("StudentId");
 
                     b.ToTable("Student", (string)null);
                 });
 
             modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Teacher", b =>
                 {
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("TeacherID")
                         .HasColumnType("int")
                         .HasColumnName("TeacherID");
 
@@ -203,9 +241,9 @@ namespace SchoolManagementDatabaseFirst.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nchar(10)")
-                        .IsFixedLength();
+                        .HasMaxLength(255)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -213,7 +251,13 @@ namespace SchoolManagementDatabaseFirst.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("TeacherId");
+                    b.Property<decimal>("Salary")
+                        .HasColumnType("decimal(18,0)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("TeacherID");
 
                     b.ToTable("Teachers");
                 });
@@ -222,15 +266,25 @@ namespace SchoolManagementDatabaseFirst.Migrations
                 {
                     b.HasOne("SchoolManagementDatabaseFirst.Models.Course", "Course")
                         .WithMany("Grades")
-                        .HasForeignKey("CourseID");
+                        .HasForeignKey("CourseId")
+                        .IsRequired();
 
                     b.HasOne("SchoolManagementDatabaseFirst.Models.Student", "Student")
                         .WithMany("Grades")
-                        .HasForeignKey("StudentID");
+                        .HasForeignKey("StudentId")
+                        .IsRequired();
+
+                    b.HasOne("SchoolManagementDatabaseFirst.Models.Teacher", "Teacher")
+                        .WithMany("Grades")
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Course");
 
                     b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Course", b =>
@@ -239,6 +293,11 @@ namespace SchoolManagementDatabaseFirst.Migrations
                 });
 
             modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Student", b =>
+                {
+                    b.Navigation("Grades");
+                });
+
+            modelBuilder.Entity("SchoolManagementDatabaseFirst.Models.Teacher", b =>
                 {
                     b.Navigation("Grades");
                 });

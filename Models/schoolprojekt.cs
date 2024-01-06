@@ -29,7 +29,7 @@ namespace SchoolManagementDatabaseFirst.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+
                 optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=SchoolDatabase;Integrated Security=True");
             }
         }
@@ -38,7 +38,7 @@ namespace SchoolManagementDatabaseFirst.Models
         {
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.Property(e => e.CourseID)
+                entity.Property(e => e.CourseId)
                     .ValueGeneratedNever()
                     .HasColumnName("CourseID");
 
@@ -51,58 +51,66 @@ namespace SchoolManagementDatabaseFirst.Models
             {
                 entity.HasNoKey();
 
-                entity.Property(e => e.FKCourseID).HasColumnName("FKCourseID");
+                entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
 
-                entity.Property(e => e.FKStudentID).HasColumnName("FKStudentID");
+                entity.Property(e => e.FkstudentId).HasColumnName("FKStudentID");
             });
 
             modelBuilder.Entity<GivesGrade>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.Property(e => e.FKCourseID).HasColumnName("FKCourseID");
+                entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
 
-                entity.Property(e => e.FKGradeID).HasColumnName("FKGradeID");
+                entity.Property(e => e.FkgradeId).HasColumnName("FKGradeID");
 
-                entity.Property(e => e.FKStudentID).HasColumnName("FKStudentID");
+                entity.Property(e => e.FkstudentId).HasColumnName("FKStudentID");
 
-                entity.Property(e => e.FKTeacherID).HasColumnName("FKTeacherID");
+                entity.Property(e => e.FkteacherId).HasColumnName("FKTeacherID");
 
                 entity.Property(e => e.GradeDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Grade>(entity =>
             {
-                entity.HasIndex(e => e.FKCourseID, "IX_Grades_FKCourseID");
-                entity.HasIndex(e => e.FKStudentID, "IX_Grades_FKStudentID");
-                entity.Property(e => e.GradeId).ValueGeneratedOnAdd(); // För autoinkrementerande kolumn
-                entity.Property(e => e.GradeId).ValueGeneratedNever().HasColumnName("GradeID");
-                entity.Property(e => e.FKCourseID).HasColumnName("FKCourseID");
-                entity.Property(e => e.FKStudentID).HasColumnName("FKStudentID");
-                entity.Property(e => e.FKTeacherID).HasColumnName("FKTeacherID"); 
+                entity.HasIndex(e => e.CourseId, "IX_Grades_CourseID");
+
+                entity.HasIndex(e => e.StudentId, "IX_Grades_StudentID");
+
+                entity.Property(e => e.GradeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("GradeID");
+
+                entity.Property(e => e.CourseId).HasColumnName("CourseID");
+
+                entity.Property(e => e.FKCourseID).HasColumnName("_FKCourseID");
+
+                entity.Property(e => e.FKStudentID).HasColumnName("_FKStudentID");
+
                 entity.Property(e => e.GradeDate).HasColumnType("date");
-                entity.Property(e => e.GradeValue).HasMaxLength(10).IsUnicode(false);
+
+                entity.Property(e => e.GradeValue)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StudentId).HasColumnName("StudentID");
 
                 entity.HasOne(d => d.Course)
                     .WithMany(p => p.Grades)
-                    .HasForeignKey(d => d.FKCourseID)
+                    .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(d => d.Student)
                     .WithMany(p => p.Grades)
-                    .HasForeignKey(d => d.FKStudentID)
+                    .HasForeignKey(d => d.StudentId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-
-                entity.HasOne(d => d.Teacher)
-                    .WithMany(p => p.Grades)
-                    .HasForeignKey(d => d.FKTeacherID);
             });
 
             modelBuilder.Entity<Principal>(entity =>
             {
                 entity.ToTable("Principal");
 
-                entity.Property(e => e.PrincipalID)
+                entity.Property(e => e.PrincipalId)
                     .ValueGeneratedNever()
                     .HasColumnName("PrincipalID");
 
@@ -117,7 +125,7 @@ namespace SchoolManagementDatabaseFirst.Models
 
             modelBuilder.Entity<Staff>(entity =>
             {
-                entity.Property(e => e.StaffID)
+                entity.Property(e => e.StaffId)
                     .ValueGeneratedNever()
                     .HasColumnName("StaffID");
 
@@ -142,7 +150,7 @@ namespace SchoolManagementDatabaseFirst.Models
             {
                 entity.ToTable("Student");
 
-                entity.Property(e => e.StudentID)
+                entity.Property(e => e.StudentId)
                     .ValueGeneratedNever()
                     .HasColumnName("StudentID");
 
@@ -158,7 +166,7 @@ namespace SchoolManagementDatabaseFirst.Models
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PersonalIDNr)
+                entity.Property(e => e.PersonalIdnr)
                     .HasMaxLength(12)
                     .IsUnicode(false)
                     .HasColumnName("PersonalIDNr");
@@ -166,7 +174,7 @@ namespace SchoolManagementDatabaseFirst.Models
 
             modelBuilder.Entity<Teacher>(entity =>
             {
-                entity.Property(e => e.TeacherID)
+                entity.Property(e => e.TeacherId)
                     .ValueGeneratedNever()
                     .HasColumnName("TeacherID");
 

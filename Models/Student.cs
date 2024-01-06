@@ -5,14 +5,17 @@ namespace SchoolManagementDatabaseFirst.Models
 {
     public partial class Student
     {
+        public Student()
+        {
+            Grades = new HashSet<Grade>();
+        }
+
         public int StudentID { get; set; }
         public string FirstName { get; set; } = null!;
-        public string PersonalIdnr { get; set; } = null!;
-        public string Class { get; set; } = null!;
+        public string PersonalIDNr { get; set; } = null!;
+        public string ClassName { get; set; } = null!;
         public string LastName { get; set; } = null!;
 
-        // Navigationsegenskap för betyg
-        public virtual ICollection<Grade>? Grades { get; set; }
+        public virtual ICollection<Grade> Grades { get; set; }
     }
 }
-

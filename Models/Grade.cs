@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+
 
 namespace SchoolManagementDatabaseFirst.Models
 {
@@ -7,16 +7,14 @@ namespace SchoolManagementDatabaseFirst.Models
     {
         public int GradeId { get; set; }
         public DateTime GradeDate { get; set; }
-        public string Value { get; set; } = null!;
+        public string GradeValue { get; set; } = null!;
+        public int FKStudentID { get; set; }
+        public int FKCourseID { get; set; }
+        public int FKTeacherID { get; set; }    
 
-        // FK till Student-tabellen
-        public int _FKStudentId { get; set; }
-        public virtual Student? Student { get; set; }
-
-        // FK till Courses-tabellen
-        public int _FKCourseId { get; set; }
-        public virtual Course? Course { get; set; }
-
+        // Uppdaterade navigationsegenskaper
+        public virtual Course Course { get; set; } = null!;
+        public virtual Student Student { get; set; } = null!;
+        public virtual Teacher Teacher { get; set; } = null!;
     }
 }
-

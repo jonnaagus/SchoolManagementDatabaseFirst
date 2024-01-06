@@ -92,7 +92,7 @@ namespace SchoolManagementDatabaseFirst.Migrations
                     b.Property<int?>("StudentID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Value")
+                    b.Property<string>("GradeValue")
                         .IsRequired()
                         .HasMaxLength(10)
                         .IsUnicode(false)
